@@ -28,7 +28,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
       - name: minio
-        image: minio/minio
+        image: minio/minio:RELEASE.2022-02-01T18-00-14Z
         args:
         - server
         - --address
@@ -47,8 +47,7 @@ spec:
               name: {{ include "minio.fullname" . }}-secret
               key: MINIO_SECRET_KEY
         ports:
-        - name: https
-          containerPort: 443
+        - containerPort: 9000
         volumeMounts:
         - name: storage # mount the "storage" volume into the pod
           mountPath: "/storage"

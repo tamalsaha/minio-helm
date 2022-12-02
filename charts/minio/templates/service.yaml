@@ -9,10 +9,14 @@ spec:
   # type: {{ .Values.service.type }}
   type: NodePort
   ports:
-    - port: 443
-      targetPort: https
+    - port: 9000
+      targetPort: 9000
       protocol: TCP
-      name: https
+  # ports:
+  #   - port: 443
+  #     targetPort: https
+  #     protocol: TCP
+  #     name: https
   # sessionAffinity: ClientIP
   selector:
     {{- include "minio.selectorLabels" . | nindent 4 }}
