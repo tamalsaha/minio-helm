@@ -11,3 +11,8 @@
 ## bitnami
 
 - https://artifacthub.io/packages/helm/bitnami/minio
+
+```
+> k port-forward svc/minio :9001
+> k view-secret minio --all
+```
