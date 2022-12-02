@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "minio.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "minio.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "minio.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "minio.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      # serviceAccountName: {{ include "minio.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: minio
+        image: minio/minio
+        args:
+        - server
+        - --address
+        - ":443"
+        - /storage
+        env:
+        # credentials to access minio server. use from secret "minio-server-secret"
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "minio.fullname" . }}-secret
+              key: MINIO_ACCESS_KEY
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "minio.fullname" . }}-secret
+              key: MINIO_SECRET_KEY
+        ports:
+        - name: https
+          containerPort: 443
+        volumeMounts:
+        - name: storage # mount the "storage" volume into the pod
+          mountPath: "/storage"
+        - name: minio-certs # mount the certificates in "/root/.minio/certs" directory
+          mountPath: "/root/.minio/certs"
+      volumes:
+      - name: minio-certs # use secret "minio-server-secret" as volume to mount the certificates
+        secret:
+          secretName: {{ include "minio.fullname" . }}-secret
+          items:
+          - key: public.crt
+            path: public.crt
+          - key: private.key
+            path: private.key
+          - key: ca.crt
+            path: CAs/ca.crt # mark self signed certificate as trusted
+  volumeClaimTemplates:
+  - metadata:
+      name: storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      # storageClassName: "standard"
+      resources:
+        requests:
+          storage: 1Gi
