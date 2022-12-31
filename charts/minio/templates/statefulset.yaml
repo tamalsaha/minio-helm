@@ -30,7 +30,6 @@ spec:
       {{- end }}
     spec:
       {{- include "appscode.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "minio.serviceAccountName" . }}
       containers:
       - name: minio
         securityContext:
