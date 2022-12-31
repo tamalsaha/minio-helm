@@ -36,7 +36,7 @@ spec:
           {{- toYaml .Values.image.securityContext | nindent 10 }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.imagePullPolicy  }}
-        command: ["sh", "-c", "mkdir -p /storage/backupbucket && mkdir -p /root/.minio/certs && ln -s /root/certs/tls.key /root/.minio/certs/private.key && ln -s /root/certs/tls.crt /root/.minio/certs/public.crt && exec minio server /storage"]
+        command: ["sh", "-c", "mkdir -p /storage/backupbucket && mkdir -p /root/.minio/certs && ln -s /root/certs/private.key /root/.minio/certs/private.key && ln -s /root/certs/public.crt /root/.minio/certs/public.crt && exec minio server /storage"]
         ports:
         - containerPort: 9000
         env:
@@ -63,10 +63,10 @@ spec:
         secret:
           secretName: {{ include "minio.fullname" . }}-cert
           items:
-          - key: AWS_CERT
-            path: tls.crt
-          - key: AWS_CERT_KEY
-            path: tls.key
+          - key: tls.crt
+            path: public.crt
+          - key: tls.key
+            path: private.key
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
     {{- if or .Values.tolerations $criticalAddon }}
