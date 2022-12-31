@@ -1,3 +1,4 @@
+{{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
 */}}
@@ -50,13 +51,9 @@ app.kubernetes.io/name: {{ include "minio.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "minio.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "minio.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- define "appscode.imagePullSecrets" -}}
+{{- with .Values.imagePullSecrets -}}
+imagePullSecrets:
+{{- toYaml . | nindent 2 }}
 {{- end }}
 {{- end }}
