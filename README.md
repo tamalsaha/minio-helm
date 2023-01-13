@@ -3,7 +3,7 @@
 - https://github.com/appscode/third-party-tools/tree/master/storage/minio
 
 
-## Longhosrn
+## Longhorn
 
 - https://longhorn.io/docs/1.3.1/snapshots-and-backups/backup-and-restore/set-backup-target/#set-up-a-local-testing-backupstore
 - https://raw.githubusercontent.com/longhorn/longhorn/v1.3.1/deploy/backupstores/minio-backupstore.yaml
@@ -20,6 +20,11 @@
 ## 
 
 ```
+s3cmd --configure
+```
+```
+cat ~/.s3cfg
+
   Access Key: longhorn-test-access-key
   Secret Key: longhorn-test-secret-key
   Default Region: us-east-1
