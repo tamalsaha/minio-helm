@@ -45,6 +45,8 @@ $ s3cmd ls --no-check-certificate
 
 - https://min.io/docs/minio/linux/integrations/setup-nginx-proxy-with-minio.html
 - https://blog.min.io/minio-nginx-letsencrypt-certbot/
+- https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
+
 
 ```
     ignore_invalid_headers off;
