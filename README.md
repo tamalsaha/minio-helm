@@ -45,8 +45,6 @@ $ s3cmd ls --no-check-certificate
 
 - https://min.io/docs/minio/linux/integrations/setup-nginx-proxy-with-minio.html
 - https://blog.min.io/minio-nginx-letsencrypt-certbot/
-- https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
-
 
 ```
     ignore_invalid_headers off;
@@ -54,3 +52,30 @@ $ s3cmd ls --no-check-certificate
     proxy_buffering off;
     proxy_request_buffering off;
 ```
+
+## nginx ingress
+
+- https://docs.giantswarm.io/advanced/ingress/configuration/
+
+### nginx configmap
+
+- https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
+
+```
+data:
+  ignore-invalid-headers: "true"
+  proxy-body-size: "100m"
+  proxy-buffering: "off"
+  proxy-request-buffering: "off"
+```
+
+### nginx annotation
+
+- https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
+
+```
+nginx.ingress.kubernetes.io/proxy-body-size: "0"
+nginx.ingress.kubernetes.io/proxy-buffering: "off"
+nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+```
+
