@@ -40,3 +40,15 @@ cat ~/.s3cfg
 $ s3cmd ls --no-check-certificate
 2022-12-30 16:57  s3://backupbucket
 ```
+
+## MinIO nginx setup
+
+- https://min.io/docs/minio/linux/integrations/setup-nginx-proxy-with-minio.html
+- https://blog.min.io/minio-nginx-letsencrypt-certbot/
+
+```
+    ignore_invalid_headers off;
+    client_max_body_size 0;
+    proxy_buffering off;
+    proxy_request_buffering off;
+```
